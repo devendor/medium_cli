@@ -70,11 +70,11 @@ Installation
       AttributeError: 'module' object has no attribute 'exit'
 
 
-#. On medium.com settings, scroll down to developer applications, and register an application. You
-can pick any redirect_url.
+#. On medium.com settings, scroll down to developer applications, and register an application.
+   You can pick any redirect_url.
 
 #. Fill in a config file with the client_id, and client_secret returned from medium.com along with
-the redirect_url you used when requesting it.
+   the redirect_url you used when requesting it.
 
    .. code-block:: console
       user@myhost$ cat <<'EOF'>~/.medium
@@ -95,7 +95,7 @@ the redirect_url you used when requesting it.
       https://medium.com/m/oauth/authorize?scope=...
 
 #. Follow that url in a browser, click the authorize button on medium.com, and make note of the
-**code=....** value in the url your are redirected to.
+   **code=....** value in the url your are redirected to.
 
 #. Make a request and provide that initial authorization code to receive a bearer token.
 
@@ -111,7 +111,7 @@ the redirect_url you used when requesting it.
       }
 
 #. Once a bearer token is established, it is stored and kept up to date in ~/.medium_bearer allowing
-you to use the cli without passing a new code.
+   you to use the cli without passing a new code.
 
    .. code-block:: console
 
