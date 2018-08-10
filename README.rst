@@ -162,8 +162,8 @@ Related Projects
 ----------------
 
 * `medium-sdk-python`_ provides the base of my inline class.  It looks like they have several
-pull reauests that try to contribute additional features but nobodies rolling them in so I
-decided to embed my own.
+   pull reauests that try to contribute additional features but nobodies rolling them in so I
+   decided to embed my own.
 * `medium-sdk-docs`_ provides api information.
 
 
