@@ -77,6 +77,7 @@ Installation
    the redirect_url you used when requesting it.
 
    .. code-block:: console
+
       user@myhost$ cat <<'EOF'>~/.medium
       [medium]
       client_id=supplied_when_registering_app
