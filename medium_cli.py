@@ -405,7 +405,7 @@ elif s_file is not None:
                                       canonical_url=o.url)
         else:
             print "posting to publication"
-            resp = client.post_to_pub(publication_id=o.pub, title=title, content=content.read(),
+            resp = client.create_post(publication_id=o.pub, title=title, content=content.read(),
                                       content_format=in_format, publish_status="draft",
                                       canonical_url=o.url)
 

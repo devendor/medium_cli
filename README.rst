@@ -7,7 +7,7 @@ Summary
 -------
 
 Medium command line client allows you to push html, markdown, or restructured text files to
-`medium.com`_
+medium.com.
 
 HTML rendering is fairly limited by supported tags at medium, but the cli at least preserves line
 breaks in code/pre tags.
@@ -16,6 +16,8 @@ Markdown is probably the most reliable since it is also very limited in what is 
 
 Restructured text is handled by munging out some unsupported tags and mangling things like
 ordered lists that allow multi-part list items in rst, but have no counterpart in medium.
+
+Post feedback and suggestions on `medium.com`_
 
 Installation
 ------------
@@ -159,6 +161,28 @@ Inbound file type is determined by extension.
    *.rst=restructured text
    *.*=anything else is assumed to be html
 
+Example
+-------
+
+.. code-block:: console
+
+   me@home$ ./medium_cli.py -p 71cdf2d7072c \
+      -r https://github.com/devendor/medium_cli \
+      -t "Medium Command Line Client" README.rst
+   posting to publication
+   {
+    "publicationId": "71cdf2d7072c",
+    "canonicalUrl": "https://github.com/devendor/medium_cli",
+    "license": "",
+    "title": "Medium Command Line Client",
+    "url": "https://medium.com/@Ray.Ferguson/5dc3940b5780",
+    "tags": [],
+    "authorId": "1ea052e3e51b23b17fbbb0825cc6f3c8963e2438da106f96f12d2d0b01183961e",
+    "publishStatus": "draft",
+    "licenseUrl": "https://medium.com/policy/9db0094a1e0f",
+    "id": "5dc3940b5780"
+   }
+
 Related Projects
 ----------------
 
@@ -171,5 +195,5 @@ Related Projects
 
 .. _medium-sdk-python: https://github.com/Medium/medium-sdk-python/tree/master
 .. _medium-sdk-docs: https://github.com/Medium/medium-api-docs
-.. _medium.com: https://medium.com
+.. _medium.com: https://medium.com/devendor-tech/medium-command-line-client-5dc3940b5780
 .. _medium_cli.py: https://github.com/devendor/medium_cli.git
