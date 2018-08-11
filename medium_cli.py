@@ -1,5 +1,6 @@
 #! /usr/bin/env python
 import locale
+
 try:
     locale.setlocale(locale.LC_ALL, '')
 except:
@@ -14,6 +15,7 @@ from optparse import OptionParser
 from docutils.core import publish_cmdline
 from docutils.writers import s5_html as w
 import re
+
 try:
     from ConfigParser import SafeConfigParser, NoOptionError, NoSectionError
 except ImportError:
@@ -27,7 +29,7 @@ import requests
 
 bearer_file = os.path.expanduser('~/.medium_bearer')
 config_file = os.path.expanduser('~/.medium')
-config_example ="""
+config_example = """
 # Config file example
 [medium]
 client_id=supplied_when_registering_app
@@ -35,12 +37,12 @@ client_secret=supplied_when_registering_app
 redirect_url=http://192.0.2.1/must_match_registered_url
 state=canBeAnything
 """
-scopes=["basicProfile", "publishPost", "listPublications"]
-usage="Allows post of html, markdown, or rst files to medium.\n\nusage: %prog [options] [file]"
+scopes = ["basicProfile", "publishPost", "listPublications"]
+usage = "Allows post of html, markdown, or rst files to medium.\n\nusage: %prog [options] [file]"
 
 op = OptionParser(usage, add_help_option=True)
-op.add_option("-c", "--code", dest="code", default=None, help="code from redirect url after " \
-                                                             "approval")
+op.add_option("-c", "--code", dest="code", default=None, help="code from redirect url after "
+                                                              "approval")
 op.add_option("-u", "--user", action="store_true", default=False, dest='user',
               help='print user info')
 op.add_option("-l", "--list-publications", action="store_true", default=False, dest='list',
@@ -67,10 +69,9 @@ if (int(s_file is not None) + int(o.list) + int(o.user) + int(o.publication is n
     op.print_help()
     sys.exit(0)
 
-
 c = SafeConfigParser()
 if len(c.read(config_file)) == 0:
-    print "Error Config file not found: %s\n%s" % (config_file,config_example)
+    print "Error Config file not found: %s\n%s" % (config_file, config_example)
     os.exit(1)
 try:
     client_id = c.get('medium', 'client_id')
@@ -113,11 +114,11 @@ class MediumClient(object):
         :returns: str
         """
         qs = {
-            "client_id": self.application_id,
-            "scope": ",".join(scopes),
-            "state": state,
+            "client_id":     self.application_id,
+            "scope":         ",".join(scopes),
+            "state":         state,
             "response_type": "code",
-            "redirect_uri": redirect_url,
+            "redirect_uri":  redirect_url,
         }
 
         return "https://medium.com/m/oauth/authorize?" + urlencode(qs)
@@ -140,11 +141,11 @@ class MediumClient(object):
             }
         """
         data = {
-            "code": code,
-            "client_id": self.application_id,
+            "code":          code,
+            "client_id":     self.application_id,
             "client_secret": self.application_secret,
-            "grant_type": "authorization_code",
-            "redirect_uri": redirect_url,
+            "grant_type":    "authorization_code",
+            "redirect_uri":  redirect_url,
         }
         return self._request_and_set_auth_code(data)
 
@@ -165,9 +166,9 @@ class MediumClient(object):
         """
         data = {
             "refresh_token": refresh_token,
-            "client_id": self.application_id,
+            "client_id":     self.application_id,
             "client_secret": self.application_secret,
-            "grant_type": "refresh_token",
+            "grant_type":    "refresh_token",
         }
         return self._request_and_set_auth_code(data)
 
@@ -231,8 +232,8 @@ class MediumClient(object):
             }
         """
         data = {
-            "title": title,
-            "content": content,
+            "title":         title,
+            "content":       content,
             "contentFormat": content_format,
         }
         if tags is not None:
@@ -280,9 +281,9 @@ class MediumClient(object):
         """Make a signed request to the given route."""
         url = self._BASE_PATH + path
         headers = {
-            "Accept": "application/json",
+            "Accept":         "application/json",
             "Accept-Charset": "utf-8",
-            "Authorization": "Bearer %s" % self.access_token,
+            "Authorization":  "Bearer %s" % self.access_token,
         }
 
         resp = requests.request(method, url, json=json, data=form_data,
@@ -306,21 +307,17 @@ class MediumClient(object):
         :return: publications
         :rtype: `dict`
         """
-        return self._request("GET","/v1/publications/%s/contributors" % publication_id)
+        return self._request("GET", "/v1/publications/%s/contributors" % publication_id)
 
     def get_publications(self):
         """Fetch a list of publications associated with the user.
 
         Requires ``listPublications`` scope.
 
-        :param user_id: The appllication-specific user ID as returned by
-           ``get_current_user()``
-        :type user_id: `str`
         :return: users data
         :rtype: `dict`
         """
-        return self._request("GET","/v1/users/%s/publications" % self.user_id)
-
+        return self._request("GET", "/v1/users/%s/publications" % self.user_id)
 
 
 class MediumError(Exception):
@@ -340,9 +337,9 @@ class MediumError(Exception):
 client = MediumClient(application_id=client_id, application_secret=client_secret)
 
 if os.path.isfile(bearer_file):
-    with io.open(bearer_file,encoding='utf-8',mode='r') as bf:
+    with io.open(bearer_file, encoding='utf-8', mode='r') as bf:
         try:
-            bearer = json.load(bf,encoding='utf-8')
+            bearer = json.load(bf, encoding='utf-8')
             bearer = client.exchange_refresh_token(bearer['refresh_token'])
         except MediumError, e:
             print "Token failure. You must refresh your token.\n%s" % (e)
@@ -360,7 +357,7 @@ if os.path.isfile(bearer_file) is False:
     else:
         bearer = client.exchange_authorization_code(o.code, redirect_url)
 
-with open(bearer_file,mode='w') as bf:
+with open(bearer_file, mode='w') as bf:
     json.dump(bearer, bf, encoding='utf-8', indent=3)
 
 if o.user:
@@ -371,8 +368,8 @@ elif o.publication is not None:
     resp = client.get_contributors(o.publication)
 elif s_file is not None:
     in_format = "markdown" if s_file.lower()[-3:] == '.md' else "html"
-    title = "%s %s" % (os.path.basename(os.path.splitext(s_file)[0]).replace("_"," "),
-                   time.strftime("%Y%m%d-%X%Z")) if o.title is None else o.title
+    title = "%s %s" % (os.path.basename(os.path.splitext(s_file)[0]).replace("_", " "),
+                       time.strftime("%Y%m%d-%X%Z")) if o.title is None else o.title
     if s_file[-4:].lower() == ".rst":
         html_file = "/tmp/%s.html" % os.path.basename(s_file)[:-4]
         tmp_rst = "/tmp/%s" % os.path.basename(s_file)
@@ -381,21 +378,20 @@ elif s_file is not None:
         with io.open(s_file, mode="r", encoding="utf-8") as content_in:
             with io.open(tmp_rst, mode='w', encoding='utf-8') as content_out:
                 content_out.write(u'.. role:: index(raw)\n   :format: html\n\n')
-                for l in content_in:
-                    if u'.. todo:: ' in l:
-                        l = l.replace(u'.. todo:: ',u'.. note:: TODO: ')
-                    i = l.find(u'.. code-block::')
+                for line in content_in:
+                    if u'.. todo:: ' in line:
+                        line = line.replace(u'.. todo:: ', u'.. note:: TODO: ')
+                    i = line.find(u'.. code-block::')
                     if i >= 0:
-                        l = l[:i] + u'.. code-block::\n'
-                    m = re_number.match(l)
+                        line = line[:i] + u'.. code-block::\n'
+                    m = re_number.match(line)
                     if m is not None:
-                        l = u'%s   %s' % m.groups()
+                        line = u'%s   %s' % m.groups()
 
-                    content_out.write(l)
+                    content_out.write(line)
 
-        publish_cmdline(writer=w.Writer(),argv=[tmp_rst,html_file])
+        publish_cmdline(writer=w.Writer(), argv=[tmp_rst, html_file])
         s_file = html_file
-
 
     with io.open(s_file, mode="r", encoding="utf-8") as content:
         if o.pub is None:
@@ -413,5 +409,4 @@ elif s_file is not None:
         os.unlink(tmp_rst)
         os.unlink(html_file)
 
-print json.dumps(resp,indent=1)
-
+print json.dumps(resp, indent=1)
